@@ -5,7 +5,7 @@ import java.util.List;
 
 /**
  * A Bookstore class which stores every novel listed
- * using a few methods
+ * has a main() method that demonstrates the Bookstore's functionality
  *
  * @author Yen Yi
  * @author Brian Lau
@@ -20,14 +20,30 @@ public class Bookstore
     private static final double NO_PERCENTAGE = 0.0;
     private static final double PERCENT_CONVERSION_FACTOR = 100.0;
 
-    private final String name;
+    private final String bookStoreName;
     private final List<Novel> novels;
 
-    public Bookstore(final String name)
+    /**
+     * Constructs Bookstore with the given name and initial collection of novels
+     *
+     * @param bookStoreName the name of the BookStore to construct
+     */
+    public Bookstore(final String bookStoreName)
     {
-        this.name = name;
+        validateBookStoreName(bookStoreName);
+        this.bookStoreName = bookStoreName;
+
         novels = new ArrayList<>();
 
+        addNovels();
+
+    }
+
+    /**
+     * Helper method that adds all the novels to the BookStore.
+     */
+    private void addNovels()
+    {
         novels.add(new Novel("The Adventures of Augie March", "Saul Bellow", 1953));
         novels.add(new Novel("All the King's Men", "Robert Penn Warren", 1946));
         novels.add(new Novel("American Pastoral", "Philip Roth", 1997));
@@ -128,14 +144,16 @@ public class Bookstore
         novels.add(new Novel("White Noise", "Don DeLillo", 1985));
         novels.add(new Novel("White Teeth", "Zadie Smith", 2000));
         novels.add(new Novel("Wide Sargasso Sea", "Jean Rhys", 1966));
-
     }
 
     public String getName()
     {
-        return name;
+        return bookStoreName;
     }
 
+    /**
+     * Prints the title of every novel in the bookstore in all UPPERCASE.
+     */
     public void printAllTitles()
     {
         for (final Novel novel : novels)
@@ -144,6 +162,11 @@ public class Bookstore
         }
     }
 
+    /**
+     * Prints the titles of all books that contain the given String
+     *
+     * @param title the String to search for in the book titles
+     */
     public void printBookTitle(final String title)
     {
         for (final Novel novel : novels)
@@ -155,12 +178,19 @@ public class Bookstore
         }
     }
 
+    /**
+     * Prints all titles in alphabetical order, uses Collections.sort() to sort a copy of inventory alphabetically.
+     * The original inventory instance variable is not changed.
+     */
     public void printTitlesInAlphaOrder()
     {
         final List<Novel> alphabets;
         alphabets = new ArrayList<>();
 
+        alphabets.addAll(novels);
+
         Collections.sort(alphabets);
+
         for (final Novel novel : alphabets)
         {
             final String title;
@@ -170,6 +200,13 @@ public class Bookstore
         }
     }
 
+    /**
+     * Prints the titles of all books in the bookstore that were printed in the given decade. A decade is
+     * considered to extend from the zeroth to ninth year; for example, books printed from 2000 to 2009, inclusive,
+     * are considered to have been printed in the 2000s.
+     *
+     * @param decade The decade of books to print, as an integer year.
+     */
     public void printGroupByDecade(final int decade)
     {
         final int decadeStart;
@@ -188,6 +225,11 @@ public class Bookstore
         }
     }
 
+    /**
+     * Returns the longest title in the inventory.
+     *
+     * @return the String of the longest book title
+     */
     public String getLongest()
     {
         String longestTitle;
@@ -209,6 +251,13 @@ public class Bookstore
         return longestTitle;
     }
 
+    /**
+     * Determines whether the bookstore has a book written in the given year.
+     *
+     * @param year the year to find a book written in
+     *
+     * @return true if the bookstore has a book written that year, false otherwise.
+     */
     public boolean isThereABookWrittenIn(final int year)
     {
         for (final Novel novel : novels)
@@ -224,6 +273,13 @@ public class Bookstore
         return false;
     }
 
+    /**
+     * Returns the number of book titles containing a provided String word.
+     *
+     * @param word is the String that book titles contain
+     *
+     * @return int representing number of books containing word
+     */
     public int howManyBooksContain(final String word)
     {
         int amountBookContainingWord;
@@ -243,6 +299,14 @@ public class Bookstore
         return amountBookContainingWord;
     }
 
+    /**
+     * Determines what percentage of the bookstore's novels was written between firstYear and lastYear
+     *
+     * @param firstYear The beginning year of the range.
+     * @param lastYear The final year of the range.
+     *
+     * @return The percentage of the bookstore's novels that was published within the given range of years.
+     */
     public double whichPercentWrittenBetween(final int firstYear,
                                              final int lastYear)
     {
@@ -274,6 +338,11 @@ public class Bookstore
         return ratio * PERCENT_CONVERSION_FACTOR;
     }
 
+    /**
+     * Returns the oldest book in the Bookstore based on the publishing year.
+     *
+     * @return Novel with the oldest publishing year
+     */
     public Novel getOldestBook()
     {
         Novel oldestBook;
@@ -295,6 +364,13 @@ public class Bookstore
         return oldestBook;
     }
 
+    /**
+     * Returns all novels in the bookstore whose titles are of the given length.
+     *
+     * @param titleLength the length of titles to get books of
+     *
+     * @return a List of the novels the bookstore has that have titles of the given length
+     */
     public List<Novel> getBooksThisLength(final int titleLength)
     {
         final List<Novel> novelLength;
@@ -316,8 +392,27 @@ public class Bookstore
         return novelLength;
     }
 
+    /*
+     * Validates the Bookstore's name. A store name is valid if it is not null or blank.
+     *
+     * @param storeName the store name to validate
+     */
+    private static void validateBookStoreName(final String bookStoreName)
+    {
+        if (bookStoreName == null ||
+                bookStoreName.isBlank())
+        {
+            throw new IllegalArgumentException("Invalid store name.");
+        }
+    }
 
-
+    /**
+     * The main entry point for the application.
+     * Demonstrates creating a Bookshop, printing the collection, filtering out
+     * specific titles, and printing a sorted list.
+     *
+     * @param args unused
+     */
     public static void main(String[] args)
     {
         final Bookstore bookstore;
